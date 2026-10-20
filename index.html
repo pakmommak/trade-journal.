@@ -2,7 +2,9 @@
 <html lang="th">
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0e14">\n<link rel="manifest" href="./manifest.webmanifest">\n<link rel="apple-touch-icon" href="./icons/icon-192.png">
+<meta name="theme-color" content="#0b0e14">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="apple-touch-icon" href="./icons/icon-192.png">
 <title>Trade Journal</title>
 <style>
 :root{--bg:#090d14;--panel:#111925;--panel2:#1a293b;--line:#30445c;--text:#edf5ff;--muted:#9aafc5;--green:#35d6a2;--red:#ff6b7d;--blue:#79baff;--gold:#9bbbd0;--gold-soft:#20364a;--shadow:0 12px 32px #0005}
@@ -163,5 +165,10 @@ const selectAll=$('selectAllTrades');if(selectAll)selectAll.addEventListener('ch
 function renderSearchOptions(query=''){const box=$('searchOptions'),input=$('search'),q=String(query||'').trim().toLowerCase();const symbols=['XAUUSD','EURUSD','GBPUSD','USDJPY','US30','US100','อื่น ๆ'];const techniques=[...new Set([...$('technique').options].map(o=>o.value).concat(trades.map(t=>t.technique).filter(Boolean)))];const entries=[...symbols.map(v=>({v,type:'Symbol'})),...techniques.map(v=>({v,type:'เทคนิค'}))].filter(x=>!q||x.v.toLowerCase().includes(q));box.innerHTML=entries.map(x=>`<div class="search-suggestion" data-value="${esc(x.v)}"><b>${esc(x.v)}</b><small>${x.type} · แตะเพื่อค้นหา</small></div>`).join('');if(!entries.length)box.innerHTML='<div class="search-suggestion">ไม่พบรายการแนะนำ — กดค้นหาจากข้อความได้ตามปกติ</div>';const r=input.getBoundingClientRect();box.style.left=r.left+'px';box.style.width=Math.max(r.width,220)+'px';box.style.top=Math.max(8,Math.min(r.bottom+4,window.innerHeight-Math.min(300,window.innerHeight*.42)-8))+'px';box.hidden=false}
 $('search').addEventListener('input',()=>{render();renderSearchOptions($('search').value)});$('searchOptions').addEventListener('click',e=>{const item=e.target.closest('.search-suggestion');if(!item||!item.dataset.value)return;$('search').value=item.dataset.value;render();$('searchOptions').hidden=true});document.addEventListener('click',e=>{if(!e.target.closest('#search')&&!e.target.closest('#searchOptions'))$('searchOptions').hidden=true});window.addEventListener('resize',()=>{if(!$('searchOptions').hidden)renderSearchOptions($('search').value)});
 load();
+</script>
+<script>
+if ('serviceWorker' in navigator && location.protocol === 'https:') {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(err => console.error('Service worker registration failed:', err)));
+}
 </script>
 </body></html>
